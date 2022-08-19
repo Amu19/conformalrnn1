@@ -4,10 +4,11 @@
 import pickle
 
 import numpy as np
+import pandas as pd
 import torch
 from sklearn.preprocessing import StandardScaler
 
-mimic_root = "data/mimic.p"
+#mimic_root = "data/mimic.p"
 
 
 class MIMICDataset(torch.utils.data.Dataset):
@@ -53,16 +54,18 @@ def process_mimic_data(feature="wbchigh"):
         "wbclow",
         "antibiotics",
         "norepinephrine",
-        "mechanical_ventilator",
-        "age",
-        "weight",
+        "mechanical_ventilator"
+        #"age",
+       # "weight",
     ]
 
     idx = feature_names.index(feature)
 
-    with open(mimic_root, "rb") as f:
-        MIMIC_data = pickle.load(f)
+#    with open(mimic_root, "rb") as f:
+#        MIMIC_data = pickle.load(f)
 
+    MIMIC_data = pd.read_csv('C:/Users/Chicki/Desktop/Data/updated/final_input.csv')
+    
     Y = MIMIC_data["longitudinal"][:, :, idx]  # 'wbchigh'
     L = MIMIC_data["trajectory_lengths"]
 
@@ -142,3 +145,5 @@ def get_mimic_splits(
                 pickle.dump((train_dataset, calibration_dataset, test_dataset), f, protocol=pickle.HIGHEST_PROTOCOL)
 
     return train_dataset, calibration_dataset, test_dataset
+
+print(train_dataset.head())
