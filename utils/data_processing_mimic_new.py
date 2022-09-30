@@ -61,10 +61,12 @@ def process_mimic_data(feature="wbchigh"):
 
     idx = feature_names.index(feature)
 
-#    with open(mimic_root, "rb") as f:
-#        MIMIC_data = pickle.load(f)
-
-    MIMIC_data = pd.read_csv('C:/Users/Chicki/Desktop/Data/updated/final_input.csv')
+    with open(mimic_root, "rb") as f:
+        MIMIC_data = pickle.load(f)
+    
+    #kris - IF data is not loaded yet to pickle, first time load from the saved folder/downloaded from GIT
+    # kris # LOAD the updated MIMIC data from the local/saved folder #kris 
+    MIMIC_data = pd.read_csv('Data/updated/final_input.csv')  # kris
     
     Y = MIMIC_data["longitudinal"][:, :, idx]  # 'wbchigh'
     L = MIMIC_data["trajectory_lengths"]
@@ -91,10 +93,12 @@ def get_mimic_splits(
 
     if cached:
         if conformal:
-            with open("processed_data/mimic_conformal.pkl", "rb") as f:
+           
+         with open("processed_data/mimic_conformal.pkl", "rb") as f:  
                 train_dataset, calibration_dataset, test_dataset = pickle.load(f)
         else:
             with open("processed_data/mimic_raw.pkl", "rb") as f:
+            
                 train_dataset, calibration_dataset, test_dataset = pickle.load(f)
 
     else:
@@ -146,4 +150,3 @@ def get_mimic_splits(
 
     return train_dataset, calibration_dataset, test_dataset
 
-print(train_dataset.head())

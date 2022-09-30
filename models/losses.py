@@ -15,7 +15,7 @@ def model_loss_single(output, target, masks):
 def single_losses(model):
     return model.masks * (model(model.X).view(-1, model.OUTPUT_SIZE) - model.y) ** 2
 
-
+    
 def model_loss(output, target, masks):
     single_loss = torch.nn.functional.mse_loss(output, target, reduction="none")
     single_loss = masks * single_loss

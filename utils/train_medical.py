@@ -7,6 +7,7 @@ import pickle
 import torch
 
 from models.cfrnn import CFRNN, AdaptiveCFRNN
+from models.cfrnn-bh import CFRNN-BH, AdaptiveCFRNN-BH                        #kris
 from models.dprnn import DPRNN
 from models.qrnn import QRNN
 from utils.data_processing_covid import get_covid_splits
@@ -14,9 +15,12 @@ from utils.data_processing_eeg import get_eeg_splits
 from utils.data_processing_mimic import get_mimic_splits
 from utils.performance import evaluate_cfrnn_performance, evaluate_performance
 
-BASELINES = {"CFRNN": CFRNN, "AdaptiveCFRNN": AdaptiveCFRNN, "DPRNN": DPRNN, "QRNN": QRNN}
+#kris BASELINES = {"CFRNN": CFRNN, "AdaptiveCFRNN": AdaptiveCFRNN, "DPRNN": DPRNN, "QRNN": QRNN}
+BASELINES = {"CFRNN": CFRNN, "AdaptiveCFRNN": AdaptiveCFRNN, "CFRNN-BH": CFRNN-BH, "AdaptiveCFRNN-BH": AdaptiveCFRNN-BH}   #kris
 
-CONFORMAL_BASELINES = ["CFRNN", "AdaptiveCFRNN"]
+CONFORMAL_BASELINES = ["CFRNN", "AdaptiveCFRNN", "CFRNN-BH", "AdaptiveCFRNN-BH"]                                           #kris
+
+#kris CONFORMAL_BASELINES = ["CFRNN", "AdaptiveCFRNN"]
 
 DEFAULT_MEDICAL_PARAMETERS = {
     "batch_size": 150,
@@ -31,17 +35,27 @@ DEFAULT_MEDICAL_PARAMETERS = {
 # Epochs are counted differently in DPRNN and QRNN compared to CoRNN but
 # similar number of iterations are performed; see implementation details.
 EPOCHS = {
-    "CFRNN": {"mimic": 1000, "eeg": 100, "covid": 1000},
-    "AdaptiveCFRNN": {"mimic": 1000, "eeg": 100, "covid": 1000},
-    "DPRNN": {"mimic": 10, "eeg": 10, "covid": 10},
-    "QRNN": {"mimic": 10, "eeg": 10, "covid": 10},
+    "AdaptiveCFRNN": {"mimic": 1000},
+    "CFRNN": {"mimic": 1000},
+    "AdaptiveCFRNN-BH": {"mimic": 1000},
+    "CFRNN-BH": {"mimic": 1000},
+    #kris "CFRNN": {"mimic": 1000, "eeg": 100, "covid": 1000},
+    #kris "AdaptiveCFRNN": {"mimic": 1000, "eeg": 100, "covid": 1000},
+    #kris "DPRNN": {"mimic": 10, "eeg": 10, "covid": 10},
+    #kris "QRNN": {"mimic": 10, "eeg": 10, "covid": 10},
 }
 
-DATASET_SPLIT_FUNCTIONS = {"mimic": get_mimic_splits, "eeg": get_eeg_splits, "covid": get_covid_splits}
+#kris DATASET_SPLIT_FUNCTIONS = {"mimic": get_mimic_splits, "eeg": get_eeg_splits, "covid": get_covid_splits}
 
-HORIZON_LENGTHS = {"mimic": 2, "eeg": 10, "covid": 50}
+#kris HORIZON_LENGTHS = {"mimic": 2, "eeg": 10, "covid": 50}
 
-TIMESERIES_LENGTHS = {"mimic": 47, "eeg": 40, "covid": 100}  # 49 - horizon
+#kris TIMESERIES_LENGTHS = {"mimic": 47, "eeg": 40, "covid": 100}  # 49 - horizon
+
+DATASET_SPLIT_FUNCTIONS = {"mimic": get_mimic_splits}
+
+HORIZON_LENGTHS = {"mimic": 2}
+
+TIMESERIES_LENGTHS = {"mimic": 47}  # 49 - horizon
 
 
 def run_medical_experiments(dataset, baseline, params=None, save_model=False, save_results=True, seed=0):

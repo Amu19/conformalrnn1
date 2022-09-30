@@ -32,7 +32,8 @@ def get_joint_medical_coverages(baseline, dataset, seeds=None, correct_conformal
         seeds = list(range(5))
     coverages = []
     for seed in seeds:
-        if baseline == "CFRNN" and not correct_conformal:
+        #if baseline == "CFRNN" and not correct_conformal:
+        if (baseline == "CFRNN" or baseline == "CFRNN-BH") and not correct_conformal:
             result = get_uncorrected_medical_results(dataset, seed)
         else:
             result = load_medical_results(dataset=dataset, baseline=baseline, seed=seed)
@@ -68,7 +69,8 @@ def get_medical_interval_widths(baseline, dataset, seeds=None, correct_conformal
         seeds = list(range(5))
     widths = []
     for seed in seeds:
-        if baseline == "CFRNN" and not correct_conformal:
+        #kris if baseline == "CFRNN" and not correct_conformal:
+            if (baseline == "CFRNN" or baseline == "CFRNN-BH") and not correct_conformal:
             result = get_uncorrected_medical_results(dataset, seed)
         else:
             result = load_medical_results(dataset=dataset, baseline=baseline, seed=seed)
@@ -154,13 +156,15 @@ def plot_timeseries(
 
 def plot_sample_complexity(seed=0, figure_name=None):
     coverages_mean, coverages_std = {}, {}
-    for baseline in ["QRNN", "DPRNN", "CFRNN"]:
+    #kris for baseline in ["QRNN", "DPRNN", "CFRNN"]:
+    for baseline in ["CFRNN", "CFRNN-BH"]:
         coverages_mean[baseline], coverages_std[baseline] = get_joint_coverages(
             baseline, "sample_complexity", seeds=[seed]
         )
 
     widths_mean = {}
-    for baseline in ["QRNN", "DPRNN", "CFRNN"]:
+    #kris for baseline in ["QRNN", "DPRNN", "CFRNN"]:
+    for baseline in ["CFRNN", "CFRNN-BH"]:
         widths_mean[baseline] = get_interval_widths(baseline, "sample_complexity", seeds=[seed])[0].mean(axis=1)
 
     fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(12, 3))
